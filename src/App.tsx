@@ -5,8 +5,8 @@ import { usePageContext } from "./context/PageContext";
 import "./App.css";
 
 const App = () => {
-  const { page, setPage } = usePageContext();
-  console.log(page);
+  const { page } = usePageContext();
+  // console.log(page);
 
   const renderAccToPage: any = () => {
     switch (page) {
@@ -19,36 +19,7 @@ const App = () => {
     }
   };
 
-  return (
-    <div className="flex mt-4 ml-5">
-      
-      {/* Back Button  */}
-      {page >0  && (
-        <button
-          className="bg-green-600 ml-5 px-4 py-1 rounded-lg mr-4 text-white"
-          onClick={() => setPage((pageNo) => pageNo - 1)}
-        >
-          Back
-        </button>
-        )} 
-
-         {/* Page Contents */}
-
-      {renderAccToPage()}
-
-      {/* Next Button  */}
-      {page >= 0 && page < 2 && (
-        <button
-          className="bg-green-600 ml-5 px-4 py-1 rounded-lg text-white"
-          onClick={() => setPage((pageNo) => pageNo + 1)}
-        >
-          Next
-        </button>
-      )}
-
-
-    </div>
-  );
+  return <div className="flex mt-4 ml-5">{renderAccToPage()}</div>;
 };
 
 export default App;
