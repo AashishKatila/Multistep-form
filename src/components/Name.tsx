@@ -1,71 +1,48 @@
-import { IFormInput } from "../types/formTypes";
 import { usePageContext } from "../context/PageContext";
-import { useForm, SubmitHandler } from "react-hook-form";
-// import { useContext } from "react";
-// import { FormDataContext } from "../context/FormContext";
-
 
 const Name = () => {
-  const { next } = usePageContext();
-
-  // const {allData,setAllData} = useContext(FormDataContext)
-
-  const { register, handleSubmit, watch, formState } = useForm<IFormInput>();
-
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    localStorage.setItem("names",JSON.stringify(data))
-    next();
-    console.log(data);
-  };
-
-  const watchFirstName = watch("firstName");
-  const watchLastName = watch("lastName");
+  const { form } = usePageContext();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center ">
-        <label htmlFor="name" className="text-white mr-5">
-          First Name
-        </label>
-        <input
-          type="firstname"
-          className="py-1 rounded-lg pl-3"
-          {...register("firstName", {
-            required: "First name is required",
-          })}
-          // onChange={(e) => updateFields({ firstName: e.target.value })}
-          value={watchFirstName}
-        />
-        {formState.errors.email && (
-          <p className="text-red-500">{formState.errors.email.message}</p>
-        )}
+    <div className="flex items-center ">
+      <label htmlFor="name" className="text-white mr-5">
+        First Name
+      </label>
 
-        <br />
+      <input
+        type="firstname"
+        className="py-1 rounded-lg pl-3"
+        {...form.register("firstName", {
+          required: "First name is required",
+        })}
+        value={form.watch("firstName")}
+      />
 
-        <label htmlFor="name" className="text-white mr-5">
-          Last Name
-        </label>
-        <input
-          type="lastName"
-          className="py-1 rounded-lg pl-3"
-          {...register("lastName", {
-            required: "Last name is required",
-          })}
-          // onChange={(e) => updateFields({ lastName: e.target.value })}
-          value={watchLastName}
-        />
-        {formState.errors.email && (
-          <p className="text-red-500">{formState.errors.email.message}</p>
-        )}
+      {form.formState.errors.firstName && (
+        <p className="text-red-500">
+          {form.formState.errors.firstName.message}
+        </p>
+      )}
 
-        <button
-          type="submit"
-          className="bg-green-600 ml-5 px-4 py-1 rounded-lg text-white"
-        >
-          Next
-        </button>
-      </div>
-    </form>
+      <br />
+
+      <label htmlFor="name" className="text-white mr-5">
+        Last Name
+      </label>
+
+      <input
+        type="lastName"
+        className="py-1 rounded-lg pl-3"
+        {...form.register("lastName", {
+          required: "Last name is required",
+        })}
+        value={form.watch("lastName")}
+      />
+
+      {form.formState.errors.lastName && (
+        <p className="text-red-500">{form.formState.errors.lastName.message}</p>
+      )}
+    </div>
   );
 };
 
