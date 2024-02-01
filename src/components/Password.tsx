@@ -9,8 +9,21 @@ const Password = () => {
   const { register, handleSubmit, watch, formState } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    next();
+    localStorage.setItem("password",JSON.stringify(data))
     console.log(data);
+    next();
+    const allNames = localStorage.getItem("names")
+    const emails = localStorage.getItem("email")
+    const password = localStorage.getItem("password")
+
+    const parsedNames = JSON.parse(allNames)
+    const parsedEmail = JSON.parse(emails)
+    const parsedPassword = JSON.parse(password)
+
+    const mergedData = {
+      ...parsedNames,...parsedEmail,...parsedPassword
+    }
+    console.log(mergedData)
   };
 
   const watchPassword = watch("password");

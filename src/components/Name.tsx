@@ -1,15 +1,19 @@
 import { IFormInput } from "../types/formTypes";
 import { usePageContext } from "../context/PageContext";
 import { useForm, SubmitHandler } from "react-hook-form";
+// import { useContext } from "react";
+// import { FormDataContext } from "../context/FormContext";
+
 
 const Name = () => {
-
-
   const { next } = usePageContext();
+
+  // const {allData,setAllData} = useContext(FormDataContext)
 
   const { register, handleSubmit, watch, formState } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    localStorage.setItem("names",JSON.stringify(data))
     next();
     console.log(data);
   };
@@ -29,6 +33,7 @@ const Name = () => {
           {...register("firstName", {
             required: "First name is required",
           })}
+          // onChange={(e) => updateFields({ firstName: e.target.value })}
           value={watchFirstName}
         />
         {formState.errors.email && (
@@ -46,6 +51,7 @@ const Name = () => {
           {...register("lastName", {
             required: "Last name is required",
           })}
+          // onChange={(e) => updateFields({ lastName: e.target.value })}
           value={watchLastName}
         />
         {formState.errors.email && (

@@ -1,30 +1,35 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+// import { useContext } from "react";
 import { IFormInput } from "../types/formTypes";
 import { usePageContext } from "../context/PageContext";
+// import { FormDataContext } from "../context/FormContext";
 
 const Email = () => {
+  const { next, back } = usePageContext();
 
-  const { next,back } = usePageContext();
+  const { register, handleSubmit, watch, formState } = useForm<IFormInput>();
 
-  const { register, handleSubmit, watch, formState } =
-    useForm<IFormInput>();
+  // const { allData, setAllData } = useContext(FormDataContext);
 
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    next()
+    localStorage.setItem("email",JSON.stringify(data))
+    next();
     console.log(data);
   };
 
   const watchEmail = watch("email");
 
+
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex" >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex">
       <button
-          className="bg-green-600 ml-5 px-4 py-1 rounded-lg mr-4 text-white"
-          onClick={back}
-        >
-          Back
-        </button>
+        className="bg-green-600 ml-5 px-4 py-1 rounded-lg mr-4 text-white"
+        onClick={back}
+      >
+        Back
+      </button>
       <div>
         <label htmlFor="Email" className="text-white mr-5">
           Email
