@@ -2,6 +2,7 @@ import { usePageContext } from "../context/PageContext";
 
 const Email = () => {
   const { form } = usePageContext();
+  const { isTouched } = form.getFieldState("email", form.formState);
 
   return (
     <>
@@ -11,15 +12,12 @@ const Email = () => {
         </label>
 
         <input
-          type="email"
+          type="text"
           className="py-1 rounded-lg pl-3"
-          {...form.register("email", {
-            required: "Email is required",
-            pattern: /^\S+@\S+$/i,
-          })}
-          value={form.watch("email")}
+          {...form.register("email")}
+          // value={form.watch("email")}
         />
-        {form.formState.errors.email && (
+        {form.formState.errors.email && isTouched && (
           <p className="text-red-500">{form.formState.errors.email.message}</p>
         )}
       </div>

@@ -11,10 +11,7 @@ const Password = () => {
       <input
         type="password"
         className="py-1 rounded-lg pl-3"
-        {...form.register("password", {
-          required: "Password is required",
-        })}
-        value={form.watch("password")}
+        {...form.register("password")}
       />
       {form.formState.errors.email && (
         <p className="text-red-500">{form.formState.errors.email.message}</p>

@@ -5,21 +5,16 @@ import { usePageContext } from "./context/PageContext";
 import "./App.css";
 import { SubmitHandler } from "react-hook-form";
 import { IFormInput } from "./types/formTypes";
-import handleRegister from "./customHook/handleRegister";
+import { useMutation } from "@tanstack/react-query";
+import { DevTool } from "@hookform/devtools";
 
 const App = () => {
   const { page, setPage, next, back, form } = usePageContext();
 
-  // Not working
+  console.log(form.formState.errors);
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    localStorage.setItem("firstName", data.firstName);
-    localStorage.setItem("lastName", data.lastName);
-    localStorage.setItem("email", data.email);
-    localStorage.setItem("password", data.password);
-    console.log(data);
-    // handleRegister(data);
-    try {
+  const mutation = useMutation({
+    mutationFn: async (data) => {
       const response = await fetch(
         "https://rest-api-bjno.onrender.com/register",
         {
@@ -31,28 +26,29 @@ const App = () => {
         }
       );
 
-      // Handle the response from the server
-      if (response.ok) {
-        console.log("Signup successful!");
-        setPage(0);
-        localStorage.removeItem("names");
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
-      } else {
-        console.error("Signup failed.");
+      if (!response.ok) {
+        throw new Error(`HTTP error... Status ${response.status}`);
       }
-    } catch (error) {
-      console.error("Error sending signup request:", error);
-    }
+      const json = await response.json();
+      console.log(json);
+      setPage(0);
+    },
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log(data);
+    console.log("hello");
+    //@ts-ignore
+    await mutation.mutate(data);
   };
 
   const Steps: React.ReactNode[] = [<Name />, <Email />, <Password />];
-  console.log("Steps", Steps.length - 1);
+  // console.log("Steps", Steps.length - 1);
+
+  // console.log(page);
 
   return (
     <div className="flex mt-4 ml-5">
-      {/* {console.log("Page no =", page)} */}
-      {/* Back button  */}
       {page > 0 && (
         <button
           className="bg-green-600 ml-5 px-4 py-1 rounded-lg mr-4 text-white"
@@ -80,32 +76,14 @@ const App = () => {
           </button>
         ) : (
           <button
-            onClick={() => next()}
+            onClick={() => next(page)}
             className="bg-green-600 ml-5 px-4 py-1 rounded-lg text-white"
           >
             Next
           </button>
         )}
       </form>
-
-      {/* {page === Steps.length - 1 && <h2>Last Page</h2>} */}
-
-      {/* Next or Submit button  */}
-      {/* {page === Steps.length - 1 ? (
-        <button
-          type="submit"
-          className="bg-green-600 ml-5 px-4 py-1 rounded-lg text-white"
-        >
-          Submit
-        </button>
-      ) : (
-        <button
-          onClick={() => next()}
-          className="bg-green-600 ml-5 px-4 py-1 rounded-lg text-white"
-        >
-          Next
-        </button>
-      )} */}
+      <DevTool control={form.control} />
     </div>
   );
 };
