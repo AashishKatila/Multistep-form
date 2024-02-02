@@ -7,6 +7,7 @@ import { SubmitHandler } from "react-hook-form";
 import { IFormInput } from "./types/formTypes";
 import { useMutation } from "@tanstack/react-query";
 import { DevTool } from "@hookform/devtools";
+import { toast } from "react-toastify";
 
 const App = () => {
   const { page, setPage, next, back, form } = usePageContext();
@@ -33,19 +34,18 @@ const App = () => {
       console.log(json);
       setPage(0);
     },
+    onSuccess: () => {
+      // Invalidate and refetch
+      toast("Registered sucessfully");
+    },
   });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data);
-    console.log("hello");
     //@ts-ignore
     await mutation.mutate(data);
   };
 
   const Steps: React.ReactNode[] = [<Name />, <Email />, <Password />];
-  // console.log("Steps", Steps.length - 1);
-
-  // console.log(page);
 
   return (
     <div className="flex mt-4 ml-5">
@@ -59,11 +59,6 @@ const App = () => {
       )}
 
       {/* Form  */}
-      {/* <form
-        onSubmit={
-          page < Steps.length - 1 ? () => next() : form.handleSubmit(onSubmit)
-        }
-      > */}
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
         {Steps[page]}

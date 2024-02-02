@@ -2,6 +2,7 @@ import { usePageContext } from "../context/PageContext";
 
 const Password = () => {
   const { form } = usePageContext();
+  const { isTouched } = form.getFieldState("password", form.formState);
 
   return (
     <>
@@ -13,8 +14,8 @@ const Password = () => {
         className="py-1 rounded-lg pl-3"
         {...form.register("password")}
       />
-      {form.formState.errors.email && (
-        <p className="text-red-500">{form.formState.errors.email.message}</p>
+      {form.formState.errors.password && isTouched && (
+        <p className="text-red-500">{form.formState.errors.password.message}</p>
       )}
     </>
   );

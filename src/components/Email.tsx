@@ -15,7 +15,6 @@ const Email = () => {
           type="text"
           className="py-1 rounded-lg pl-3"
           {...form.register("email")}
-          // value={form.watch("email")}
         />
         {form.formState.errors.email && isTouched && (
           <p className="text-red-500">{form.formState.errors.email.message}</p>
